@@ -46,7 +46,7 @@ namespace WebApp1
                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60 * 24 * 14);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 
@@ -60,10 +60,12 @@ namespace WebApp1
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60 * 24 * 14);
 
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                // tried logout with this commented; not needed for cookie dump
+                // options.LogoutPath = "/Identity/Account/Logout";
                 options.SlidingExpiration = true;
             });
         }
@@ -86,10 +88,14 @@ namespace WebApp1
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            //app.UseCookiePolicy();
+
             // adds authentication middleware to the request pipeline
             // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
